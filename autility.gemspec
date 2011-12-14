@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Autility::VERSION
   s.authors     = ["Josep M. Bach"]
   s.email       = ["josep.m.bach@gmail.com"]
-  s.homepage    = "http://github.com/codegram/utilities"
+  s.homepage    = "http://github.com/codegram/autility"
   s.summary     = %q{Downloads utility invoices from common spanish firms such as Endesa or Vodafone.}
   s.description = %q{Downloads utility invoices from common spanish firms such as Endesa or Vodafone.}
 
