@@ -1,6 +1,6 @@
+# encoding: utf-8
 require 'capybara'
 require 'capybara/dsl'
-require 'capybara/webkit'
 require 'show_me_the_cookies'
 require 'fileutils'
 
@@ -9,8 +9,8 @@ module Utilities
   #
   # Examples
   #
-  #   Endesa.scrape("user", "password", 9) # Download all invoices from September this year
-  #   Endesa.scrape("user", "password") # Download all invoices from the current month.
+  #   # Download the invoice from September this year and store it in /tmp.
+  #   Endesa.scrape("user", "password", 9, "/tmp") # Download all invoices from September this year
   #
   class Endesa
     include Capybara::DSL
@@ -78,7 +78,7 @@ module Utilities
         cfactura, cd_contrext = invoice[:onclick].scan(/'(\w+)','(\d+)'/).flatten
         url = "https://www.gp.endesaonline.com/gp/obtenerFacturaPDF.do?cfactura=#{cfactura}&cd_contrext=#{cd_contrext}"
         cookie = Cookie.new("JSESSIONID", get_me_the_cookie("JSESSIONID")[:value])
-        Document.new(url, cookie)
+        Document.new(url, :post, cookie)
       end
     end
 

@@ -7,10 +7,10 @@ module Utilities
       let(:params) { stub }
       let(:cookie) { stub }
 
-      subject { Document.new(url, params, cookie) }
+      subject { Document.new(url, :get, cookie, params) }
 
       it "fetches the document and saves it to a path" do
-        Command.stubs(:build).with(url, params, cookie, "foo.pdf").returns command = stub
+        Command.stubs(:build).with(url, :get, cookie, params, "foo.pdf").returns command = stub
         subject.expects(:system).with command
         subject.save("foo.pdf")
       end

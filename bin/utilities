@@ -27,3 +27,23 @@ command :endesa do |c|
   end
 end
 
+command :vodafone do |c|
+  c.syntax = 'utilities vodafone [options]'
+  c.summary = 'Downloads invoices from Vodafone.'
+  c.description = 'Downloads invoices from Vodafone.'
+  c.example 'Download the invoice for the current month of user "foo" with password "bar"', 'utilities vodafone --user foo --password bar'
+  c.option '--user USER', String, 'The username for Vodafone Online'
+  c.option '--password PASSWORD', String, 'The password for Vodafone Online'
+  c.option '--month MONTH_NUMBER', Integer, 'The month (e.g. 5, 9, 12...). By default it\'s the current month'
+  c.option '--output-folder FOLDER_NAME', String, 'The output folder to store the PDF in. Defaults to ~/utilities'
+  c.action do |args, options|
+    options.default :month => Time.now.month
+    options.default :output_folder => File.expand_path("~/utilities")
+
+    raise "Both --user and --password are required options." unless options.user && options.password
+
+    result = Utilities::VodafoneSpain.scrape(options.user, options.password, options.month, options.output_folder)
+    puts "Path: #{result}"
+  end
+end
+
