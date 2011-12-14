@@ -1,0 +1,19 @@
+require 'test_helper'
+
+module Utilities
+  describe Document do
+    describe "#save" do
+      let(:url) { stub }
+      let(:params) { stub }
+      let(:cookie) { stub }
+
+      subject { Document.new(url, params, cookie) }
+
+      it "fetches the document and saves it to a path" do
+        Command.stubs(:build).with(url, params, cookie, "foo.pdf").returns command = stub
+        subject.expects(:system).with command
+        subject.save("foo.pdf")
+      end
+    end
+  end
+end

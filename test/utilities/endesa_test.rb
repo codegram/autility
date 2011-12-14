@@ -3,18 +3,33 @@ require_relative '../test_helper'
 
 module Utilities
   describe Endesa do
-    subject { Endesa.new }
+    subject { Endesa.new("foo", "bar") }
 
     before do
-      subject.setup_capybara
+      WebMock.allow_net_connect!
     end
 
     describe ".scrape" do
       it 'delegates to an instance' do
-        Endesa.stubs(:new).returns subject
+        Endesa.stubs(:new).with("foo", "bar").returns subject
         subject.expects(:scrape)
 
-        Endesa.scrape
+        Endesa.scrape("foo", "bar")
+      end
+    end
+
+    describe '#scrape' do
+      it 'gets the document in' do
+        subject.expects(:setup_capybara)
+        subject.expects(:log_in)
+        document = Document.new(url = stub, [], cookie = stub)
+        subject.expects(:document).returns(document)
+        document.expects(:save)
+
+        month = subject.send :current_month
+        year  = Time.now.year
+
+        subject.scrape.must_equal "~/utilities/endesa_#{month}_#{year}.pdf"
       end
     end
   end
