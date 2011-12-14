@@ -4,7 +4,7 @@ require 'capybara/dsl'
 require 'show_me_the_cookies'
 require 'fileutils'
 
-module Utilities
+module Autility
   # Public: A scraper for all the utility invoices i Endesa.
   #
   # Examples

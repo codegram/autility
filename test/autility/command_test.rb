@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module Utilities
+module Autility
   describe Command do
     let(:url) { "http://example.com/some_document.pdf" }
     let(:params) do

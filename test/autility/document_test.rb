@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module Utilities
+module Autility
   describe Document do
     describe "#save" do
       let(:url) { stub }

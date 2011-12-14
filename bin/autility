@@ -2,16 +2,16 @@
 
 require 'rubygems'
 require 'commander/import'
-require_relative '../lib/utilities'
+require_relative '../lib/autility'
 
-program :version, Utilities::VERSION
-program :description, 'Utilities is a CLI interface to download invoices from various utility vendors, such as Vodafone or Endesa.'
+program :version, Autility::VERSION
+program :description, 'Autility is a CLI interface to download invoices from various utility vendors, such as Vodafone or Endesa.'
 
 command :endesa do |c|
-  c.syntax = 'utilities endesa [options]'
+  c.syntax = 'autility endesa [options]'
   c.summary = 'Downloads invoices from Endesa.'
   c.description = 'Downloads invoices from Endesa.'
-  c.example 'Download the invoice for the current month of user "foo" with password "bar"', 'utilities endesa --user foo --password bar'
+  c.example 'Download the invoice for the current month of user "foo" with password "bar"', 'autility endesa --user foo --password bar'
   c.option '--user USER', String, 'The username for Endesa Online'
   c.option '--password PASSWORD', String, 'The password for Endesa Online'
   c.option '--month MONTH_NUMBER', Integer, 'The month (e.g. 5, 9, 12...). By default it\'s the current month'
@@ -22,13 +22,13 @@ command :endesa do |c|
 
     raise "Both --user and --password are required options." unless options.user && options.password
 
-    result = Utilities::Endesa.scrape(options.user, options.password, options.month, options.output_folder)
+    result = Autility::Endesa.scrape(options.user, options.password, options.month, options.output_folder)
     puts "Path: #{result}"
   end
 end
 
 command :vodafone do |c|
-  c.syntax = 'utilities vodafone [options]'
+  c.syntax = 'autility vodafone [options]'
   c.summary = 'Downloads invoices from Vodafone.'
   c.description = 'Downloads invoices from Vodafone.'
   c.example 'Download the invoice for the current month of user "foo" with password "bar"', 'utilities vodafone --user foo --password bar'
@@ -42,7 +42,7 @@ command :vodafone do |c|
 
     raise "Both --user and --password are required options." unless options.user && options.password
 
-    result = Utilities::VodafoneSpain.scrape(options.user, options.password, options.month, options.output_folder)
+    result = Autility::VodafoneSpain.scrape(options.user, options.password, options.month, options.output_folder)
     puts "Path: #{result}"
   end
 end

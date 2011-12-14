@@ -1,6 +1,6 @@
 require 'test_helper'
 
-module Utilities
+module Autility
   describe Cookie do
     subject { Cookie.new("JSESSIONID", "123") }
 

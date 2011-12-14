@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "utilities/version"
+require "autility/version"
 
 Gem::Specification.new do |s|
-  s.name        = "utilities"
-  s.version     = Utilities::VERSION
+  s.name        = "autility"
+  s.version     = Autility::VERSION
   s.authors     = ["Josep M. Bach"]
   s.email       = ["josep.m.bach@gmail.com"]
   s.homepage    = "http://github.com/codegram/utilities"
@@ -22,9 +22,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "capybara-webkit"
   s.add_runtime_dependency "show_me_the_cookies"
   s.add_runtime_dependency "commander"
-  s.add_development_dependency "vcr"
-  s.add_development_dependency "webmock"
   s.add_development_dependency "mocha"
   s.add_development_dependency "minitest"
-  s.add_development_dependency "launchy"
 end

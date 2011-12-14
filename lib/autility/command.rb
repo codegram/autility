@@ -1,4 +1,4 @@
-module Utilities
+module Autility
   # Public: A Command is a system cURL command builder.
   #
   # Examples

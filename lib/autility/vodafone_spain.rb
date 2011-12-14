@@ -3,7 +3,7 @@ require 'capybara'
 require 'capybara/dsl'
 require 'fileutils'
 
-module Utilities
+module Autility
   # Public: A scraper for all the utility invoices in VodafoneSpain.
   #
   # Examples

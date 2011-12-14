@@ -1,4 +1,4 @@
-module Utilities
+module Autility
   # Public: Represents a browser cookie.
   #
   # Examples

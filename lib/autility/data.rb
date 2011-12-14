@@ -1,4 +1,4 @@
-module Utilities
+module Autility
   # Public: Represents a remote document we are interested in.
   #
   # Examples
