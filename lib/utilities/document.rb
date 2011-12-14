@@ -13,9 +13,9 @@ module Utilities
     # Public: Initializes a new document.
     #
     # url    - The String url where we can get the document
-    # params - The Array of POST params needed to fetch it
     # cookie - the session Cookie needed to access the url
-    def initialize(url, params, cookie)
+    # params - The Array of POST params needed to fetch it
+    def initialize(url, cookie, params={})
       @url    = url
       @params = params
       @cookie = cookie
@@ -27,7 +27,7 @@ module Utilities
     #
     # Returns the Boolean response.
     def save(path)
-      command = Command.build(@url, @params, @cookie, path)
+      command = Command.build(@url, @cookie, @params, path)
       system(command)
     end
   end

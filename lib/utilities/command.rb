@@ -10,12 +10,12 @@ module Utilities
     # Public: Builds a command to fetch and save a remote document via cURL.
     #
     # url    - The String url where we can get the document
-    # params - The Array of POST params needed to fetch it
     # cookie - the session Cookie needed to access the url
+    # params - The Array of POST params needed to fetch it
     # path   - the String path to save the document to.
     #
     # Returns the String command ready to execute.
-    def build(url, params, cookie, path)
+    def build(url, cookie, params, path)
       out = "curl --data \""
 
       out << params.to_a.map do |name, value|
@@ -26,7 +26,7 @@ module Utilities
       out << " #{cookie.to_command}" if cookie
       out << " \"#{url}\""
       out << " -o "
-      out << File.expand_path(path)
+      out << path
       out
     end
     module_function :build

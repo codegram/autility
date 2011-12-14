@@ -24,24 +24,24 @@ module Utilities
       new(*args).scrape
     end
 
-    def initialize(user, password, month=nil)
+    def initialize(user, password, month, folder)
       @user     = user
       @password = password
-      @month    = month || current_month
+      @month    = month
+      @folder   = folder
       @year     = Time.now.year
     end
 
     # Public: Scrapes the endesa website and gets the invoice for the current
-    # month, saving it to ~/utilities.
+    # month, saving it to @folder.
     #
     # Returns the String path of the saved document.
     def scrape
       setup_capybara
       log_in
 
-      FileUtils.mkdir_p(File.expand_path('~/utilities'))
-      filename = "~/utilities/endesa_#{@month}_#{@year}.pdf"
-
+      FileUtils.mkdir_p(@folder)
+      filename = "#{@folder}/endesa_#{month}_#{@year}.pdf"
       document.save(filename)
       filename
     end
@@ -69,16 +69,16 @@ module Utilities
         invoices = lambda { |link| link.text =~ %r{\d{2}/\d{2}/\d{2}} }
 
         invoice = links.select(&invoices).detect do |link|
-          link.text =~ %r{/#{@month}/}
+          link.text =~ %r{/#{month}/}
           # link.text =~ %r{/11/}
         end
 
-        raise "Endesa invoice for month #{@month} is not available yet." unless invoice
+        raise "Endesa invoice for month #{month} is not available yet." unless invoice
 
         cfactura, cd_contrext = invoice[:onclick].scan(/'(\w+)','(\d+)'/).flatten
         url = "https://www.gp.endesaonline.com/gp/obtenerFacturaPDF.do?cfactura=#{cfactura}&cd_contrext=#{cd_contrext}"
         cookie = Cookie.new("JSESSIONID", get_me_the_cookie("JSESSIONID")[:value])
-        Document.new(url, [], cookie)
+        Document.new(url, cookie)
       end
     end
 
@@ -93,8 +93,8 @@ module Utilities
     end
 
     # Internal: Returns the String current month padded with zeros to the left.
-    def current_month
-      Time.now.month.to_s.rjust(2, '0')
+    def month
+      @month.to_s.rjust(2, '0')
     end
 
     # Internal: Sets the configuration for capybara to work with the Endesa

@@ -12,7 +12,7 @@ module Utilities
     #
     # Returns the String cURL option.
     def to_command
-      %q(--cookie "#{name}=#{value}")
+      %Q(--cookie "#{name}=#{value}")
     end
   end
 end
