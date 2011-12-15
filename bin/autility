@@ -83,7 +83,9 @@ command :lacaixa do |c|
     raise "Both --user and --password are required options." unless options.user && options.password
 
     result = Autility::LaCaixa.scrape(options.user, options.password, options.month, options.output_folder)
-    puts "Path: #{result}"
+    result.each do |document_path|
+      puts "Path: #{document_path}"
+    end
   end
 end
 

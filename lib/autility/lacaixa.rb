@@ -39,17 +39,21 @@ module Autility
       @year     = Time.now.year
     end
 
-    # Public: Scrapes the vodafone website and gets the invoice for the current
+    # Public: Scrapes the lacaixa website and gets the invoice for the current
     # month, saving it to @folder.
     #
     # Returns the String path of the saved document.
-    def scrape
+    def scrape(index=nil)
       setup_capybara
       log_in
 
       FileUtils.mkdir_p(@folder)
-      filename = "#{@folder}/lacaixa_#{month}_#{@year}.pdf"
-      document.save(filename)
+      if index
+        filename = "#{@folder}/lacaixa_#{month}_#{@year}__#{index}.pdf"
+        document(index).save(filename)
+      else
+        return document
+      end
       filename
     end
 
@@ -69,7 +73,7 @@ module Autility
     # fetched yet).
     #
     # Returns the Document to be fetched.
-    def document
+    def document(index=nil)
       @document ||= begin
         params = {}
         url = "https://loc6.lacaixa.es"
@@ -86,15 +90,24 @@ module Autility
 
         within_frame(all('frame')[1][:name]) do
           within_frame('Cos') do
+            sleep 3
             find("#lbl_Varios a").click
-            p "CLICKED!"
-            binding.pry
+            sleep 3
             wait_until { find('#enlaceDescr') }
             rows = all('.table_generica tr').select do |tr|
               tr.find("td").text =~ /#{month}\/#{@year}/
             end
 
-            rows.first.find("a").click
+            if index
+              rows[index].find("a").click
+            else
+              docs = []
+              rows.each_with_index do |row, idx|
+                scraper = LaCaixa.new(@user, @password, @month, @folder)
+                docs << scraper.scrape(idx)
+              end
+              return docs
+            end
           end
         end
 
