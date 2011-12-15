@@ -47,3 +47,23 @@ command :vodafone do |c|
   end
 end
 
+command :movistar do |c|
+  c.syntax = 'autility movistar [options]'
+  c.summary = 'Downloads invoices from Movistar.'
+  c.description = 'Downloads invoices from Movistar.'
+  c.example 'Download the invoice for the current month of user "foo" with password "bar"', 'utilities movistar --user foo --password bar'
+  c.option '--user USER', String, 'The username for Movistar Online'
+  c.option '--password PASSWORD', String, 'The password for Movistar Online'
+  c.option '--month MONTH_NUMBER', Integer, 'The month (e.g. 5, 9, 12...). By default it\'s the current month'
+  c.option '--output-folder FOLDER_NAME', String, 'The output folder to store the PDF in. Defaults to ~/utilities'
+  c.action do |args, options|
+    options.default :month => Time.now.month
+    options.default :output_folder => File.expand_path("~/utilities")
+
+    raise "Both --user and --password are required options." unless options.user && options.password
+
+    result = Autility::MovistarSpain.scrape(options.user, options.password, options.month, options.output_folder)
+    puts "Path: #{result}"
+  end
+end
+

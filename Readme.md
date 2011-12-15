@@ -5,7 +5,11 @@ A scraper that automatically downloads PDF invoices from utility vendors. That's
 It will focus mainly on spanish vendors, but pull requests will be accepted
 to support as many vendors as possible.
 
-For now it supports downloading invoices from Endesa and Vodafone Spain.
+For now it supports downloading invoices from:
+
+* Endesa
+* Vodafone (Spain)
+* Movistar (Spain)
 
 ## Install
 
