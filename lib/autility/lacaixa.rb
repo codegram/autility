@@ -71,6 +71,8 @@ module Autility
     # Returns the Document to be fetched.
     def document
       @document ||= begin
+        params = {}
+        url = "https://loc6.lacaixa.es"
 
         wait_until { find('frame') }
 
@@ -101,6 +103,7 @@ module Autility
         within_frame(all('frame')[1][:name]) do
           within_frame('Cos') do
             within_frame("Fr1") do
+              url = find("form[name=\"datos\"]")[:action]
               within("form[name=\"datos\"]") do
                 guardar = {
                   "PN" => "COM",
@@ -115,59 +118,18 @@ module Autility
                   "OPCION" => ""
                 }
 
-                b = all('input').reduce({}) do |h, i|
+                params = all('input').reduce({}) do |h, i|
                   h.update({ i[:name] => i[:value] })
                 end.update(guardar)
-                p b
-                binding.pry
-              end
-            end
-
-            exit(1)
-            find("#lbl_Varios a").click
-            wait_until { find('#enlaceDescr') }
-            rows = all('.table_generica tr').select do |tr|
-              tr.find("td").text =~ /#{month}\/#{@year}/
-            end
-
-            rows.first.find("a").click
-          end
-        end
-
-
-        exit(1)
-
-        # cookie = Cookie.new("wacsessionid", get_me_the_cookie("wacsessionid")[:value])
-
-        visit "https://www.movistar.es/id/priv/seg00/jsp/UFE/es/IDAA00SCUFE_1_facturas_STB.jsp?SOLDUP="
-
-        combo = all(".combos_numerados_facturacion1")[1]
-        select = combo.find(".combos_numeros")
-        id = select[:id]
-        options = select.all('option')
-
-        found = options.detect do |date|
-          date.text =~ /#{month}-#{@year}/
-        end
-
-        url = "https://www.movistar.es"
-
-        if found
-          select(found.text, from: id)
-          find("#aceptar").click
-
-          within_window(page.driver.browser.window_handles.last) do
-            within_frame(find('frame')[:id]) do
-              within_frame(find('iframe')[:id]) do
-                url += find('#descargar a')[:href].gsub("javascript:CargarGuardar('","").gsub("')","")
               end
             end
           end
-        else
-          raise "LaCaixa invoice for month #{month} is not available yet."
         end
 
-        Document.new(url, :get, cookie)
+        Capybara.app_host = "https://loc6.lacaixa.es"
+        cookie = Cookie.new("JSESSIONID_CTX", get_me_the_cookie("JSESSIONID_CTX")[:value])
+
+        Document.new(url, :post, cookie, params)
       end
     end
 

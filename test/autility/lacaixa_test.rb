@@ -28,8 +28,5 @@ module Autility
         subject.scrape.must_equal "/tmp/utilities/lacaixa_#{month}_#{year}.pdf"
       end
     end
-
-    it 'rocks' do
-    end
   end
 end
