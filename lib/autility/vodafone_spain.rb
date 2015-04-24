@@ -50,10 +50,13 @@ module Autility
     #
     # Returns nothing.
     def log_in
-      visit "/cpar/do/home/loginVodafone?type=empresas"
-      fill_in "user", :with => @user
-      fill_in "pass", :with => @password
-      first(".botonera_entrar #login").click
+      visit "https://www.vodafone.es/autonomos/es/"
+      form = find('#loginForm')
+      within '#loginForm' do
+        fill_in "uuid", :with => @user
+        fill_in "password", :with => @password
+        click_link("Entrar")
+      end
     end
 
     # Internal: Gets the latest invoice and returns it as a Document (not
@@ -62,25 +65,24 @@ module Autility
     # Returns the Document to be fetched.
     def document
       @document ||= begin
-        invoice = nil
+                      within '.mainNav' do
+                        click_link("Facturación")
+                        click_link("Consulta de facturas")
+                      end
+                      click_link("Invoice history")
 
-        visit "https://areaclientes.vodafone.es/cwgc/do/ebilling/get?ebplink=/tbmb/main/dashboard/invoices.do"
+                      row = within "table#recent_invoices_tab1" do
+                        all("tr").detect do |tr|
+                          tr.text =~ /-#{month}-#{@year}/
+                        end
+                      end
 
-        within "table#recent_invoices_tab1" do
-          row = all("tr").detect do |tr|
-            tr.text =~ /-#{month}-#{@year}/
-          end
-          invoice = row.find('#scriptOnly a')
-        end
+                      url = within row do
+                        click_link "PDF"
+                        find('iframe')[:src]
+                      end
 
-        raise "VodafoneSpain invoice for month #{month} is not available yet." unless invoice
-
-        url = "https://b2b.ebilling.vodafone.es/tbmb"
-        url += invoice[:onclick].gsub("downloadDocument('", '')[0..-2]
-
-        p url
-
-        Document.new(url)
+                      Document.new(url)
       end
     end
 
