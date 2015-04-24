@@ -55,7 +55,7 @@ module Autility
       visit "/gp/login.do"
       fill_in "id",    :with => @user
       fill_in "clave", :with => @password
-      first("#entrar").click
+      first(".bLogin a").click
     end
 
     # Internal: Gets the latest invoice and returns it as a Document (not
@@ -64,22 +64,24 @@ module Autility
     # Returns the Document to be fetched.
     def document
       @document ||= begin
-        visit "/gp/GenericForward.do?TO=ListadoFacturas"
-        links = all("#capa_contenido form table table td > a")
-        invoices = lambda { |link| link.text =~ %r{\d{2}/\d{2}/\d{2}} }
+                      visit "https://www.gp.endesaonline.com/gp/GenericForward.do?TO=obtenerBuscadorFacturasGP"
+                      rows = all("#listado_facturas tr").to_a
+                      rows.shift # header
 
-        invoice = links.select(&invoices).detect do |link|
-          link.text =~ %r{/#{month}/}
-          # link.text =~ %r{/11/}
-        end
+                      row = rows.detect do |row|
+                        date = row.all('td')[6].text
+                        date =~ %r{\d{2}/#{month.to_i}/\d{2}}
+                      end
 
-        raise "Endesa invoice for month #{month} is not available yet." unless invoice
+                      invoice = row.first('a')
 
-        cfactura, cd_contrext = invoice[:onclick].scan(/'(\w+)','(\d+)'/).flatten
-        url = "https://www.gp.endesaonline.com/gp/obtenerFacturaPDF.do?cfactura=#{cfactura}&cd_contrext=#{cd_contrext}"
-        cookie = Cookie.new("JSESSIONID", get_me_the_cookie("JSESSIONID")[:value])
-        Document.new(url, :post, cookie)
-      end
+                      raise "Endesa invoice for month #{month} is not available yet." unless invoice
+
+                      cd_cfactura, cd_contrext, estado, secfactu, creffact, sfecha, sPos = invoice[:href].scan(/descargarPDFFactura\(([^\)]+)\)/).flatten.first.split(",").map { |s| s[1..-2] }
+                      url = "https://www.gp.endesaonline.com/gp/GenericForward.do?TO=GenerarFacturas&CFACTURA=" + cd_cfactura +"&SECFACTU="+ secfactu +"&CREFFACT=" + creffact+ "&SFECHA=" + sfecha+"&ESTADO=" + estado + "&pos=" + sPos
+                      cookie = Cookie.new('JSESSIONID', get_me_the_cookie('JSESSIONID')[:value])
+                      Document.new(url, :get, cookie)
+                    end
     end
 
     # Internal: Hack for ShowMeTheCookies.

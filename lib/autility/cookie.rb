@@ -12,7 +12,7 @@ module Autility
     #
     # Returns the String cURL option.
     def to_command
-      %Q(--cookie "#{name}=#{value}")
+      "#{name}=#{value}"
     end
   end
 end

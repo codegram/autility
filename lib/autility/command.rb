@@ -11,12 +11,12 @@ module Autility
     #
     # url    - The String url where we can get the document
     # method - the String HTTP method to use.
-    # cookie - the session Cookie needed to access the url
+    # cookies - the session Cookies needed to access the url
     # params - The Array of POST params needed to fetch it
     # path   - the String path to save the document to.
     #
     # Returns the String command ready to execute.
-    def build(url, method, cookie, params, path)
+    def build(url, method, cookies, params, path)
       out = "curl"
 
       if method == :post
@@ -29,10 +29,16 @@ module Autility
         out << "\""
       end
 
-      out << " #{cookie.to_command}" if cookie
+      if Array === cookies && cookies.any?
+        out << %Q{ --cookie "#{cookies.map(&:to_command).join('; ')}"}
+      elsif cookies.is_a?(Cookie)
+        out << %Q{ --cookie "#{cookies.to_command}"}
+      end
+
       out << " \"#{url}\""
       out << " -o "
       out << path
+      puts out
       out
     end
     module_function :build

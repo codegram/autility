@@ -7,9 +7,7 @@ module Autility
 
     describe ".scrape" do
       it 'delegates to an instance' do
-        Endesa.stubs(:new).with("foo", "bar", 11, "/tmp/utilities").returns subject
-        subject.expects(:scrape)
-
+        Endesa.any_instance.expects(:scrape)
         Endesa.scrape("foo", "bar", 11, "/tmp/utilities")
       end
     end

@@ -7,9 +7,7 @@ module Autility
 
     describe ".scrape" do
       it 'delegates to an instance' do
-        VodafoneSpain.stubs(:new).with("foo", "bar", 11, "/tmp/utilities").returns subject
-        subject.expects(:scrape)
-
+        VodafoneSpain.any_instance.expects(:scrape)
         VodafoneSpain.scrape("foo", "bar", 11, "/tmp/utilities")
       end
     end
