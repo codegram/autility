@@ -5,8 +5,8 @@ require_relative 'autility/cookie'
 
 require_relative 'autility/endesa'
 require_relative 'autility/vodafone_spain'
-require_relative 'autility/movistar_spain'
 require_relative 'autility/lacaixa'
+require_relative 'autility/ono'
 
 module Autility
 end

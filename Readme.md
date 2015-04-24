@@ -9,7 +9,7 @@ For now it supports downloading invoices from:
 
 * Endesa
 * Vodafone (Spain)
-* Movistar (Spain)
+* Ono (Spain)
 * La Caixa (messages)
 
 ## Install

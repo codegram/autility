@@ -51,7 +51,6 @@ module Autility
     # Returns nothing.
     def log_in
       visit "https://www.vodafone.es/autonomos/es/"
-      form = find('#loginForm')
       within '#loginForm' do
         fill_in "uuid", :with => @user
         fill_in "password", :with => @password

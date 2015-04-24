@@ -31,7 +31,7 @@ command :vodafone do |c|
   c.syntax = 'autility vodafone [options]'
   c.summary = 'Downloads invoices from Vodafone.'
   c.description = 'Downloads invoices from Vodafone.'
-  c.example 'Download the invoice for the current month of user "foo" with password "bar"', 'utilities vodafone --user foo --password bar'
+  c.example 'Download the invoice for the current month of user "foo" with password "bar"', 'autility vodafone --user foo --password bar'
   c.option '--user USER', String, 'The username for Vodafone Online'
   c.option '--password PASSWORD', String, 'The password for Vodafone Online'
   c.option '--month MONTH_NUMBER', Integer, 'The month (e.g. 5, 9, 12...). By default it\'s the current month'
@@ -47,13 +47,13 @@ command :vodafone do |c|
   end
 end
 
-command :movistar do |c|
-  c.syntax = 'autility movistar [options]'
-  c.summary = 'Downloads invoices from Movistar.'
-  c.description = 'Downloads invoices from Movistar.'
-  c.example 'Download the invoice for the current month of user "foo" with password "bar"', 'utilities movistar --user foo --password bar'
-  c.option '--user USER', String, 'The username for Movistar Online'
-  c.option '--password PASSWORD', String, 'The password for Movistar Online'
+command :ono do |c|
+  c.syntax = 'autility ono [options]'
+  c.summary = 'Downloads invoices from Ono.'
+  c.description = 'Downloads invoices from Ono.'
+  c.example 'Download the invoice for the current month of user "foo" with password "bar"', 'autility ono --user foo --password bar'
+  c.option '--user USER', String, 'The username for Ono Online'
+  c.option '--password PASSWORD', String, 'The password for Ono Online'
   c.option '--month MONTH_NUMBER', Integer, 'The month (e.g. 5, 9, 12...). By default it\'s the current month'
   c.option '--output-folder FOLDER_NAME', String, 'The output folder to store the PDF in. Defaults to ~/utilities'
   c.action do |args, options|
@@ -62,7 +62,7 @@ command :movistar do |c|
 
     raise "Both --user and --password are required options." unless options.user && options.password
 
-    result = Autility::MovistarSpain.scrape(options.user, options.password, options.month, options.output_folder)
+    result = Autility::Ono.scrape(options.user, options.password, options.month, options.output_folder)
     puts "Path: #{result}"
   end
 end
@@ -71,7 +71,7 @@ command :lacaixa do |c|
   c.syntax = 'autility lacaixa [options]'
   c.summary = 'Downloads invoices from lacaixa.'
   c.description = 'Downloads invoices from lacaixa.'
-  c.example 'Download the invoice for the current month of user "foo" with password "bar"', 'utilities lacaixa --user foo --password bar'
+  c.example 'Download the invoice for the current month of user "foo" with password "bar"', 'autility lacaixa --user foo --password bar'
   c.option '--user USER', String, 'The username for lacaixa Online'
   c.option '--password PASSWORD', String, 'The password for lacaixa Online'
   c.option '--month MONTH_NUMBER', Integer, 'The month (e.g. 5, 9, 12...). By default it\'s the current month'
